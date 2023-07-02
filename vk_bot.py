@@ -98,7 +98,7 @@ class VkTools:
 
 
 if __name__ == '__main__':
-    user_id = 84268220
+    user_id = 888888
     tools = VkTools(config.access_token)
     params = tools.get_users(user_id)
     candidates = tools.search_candidates(params, 20)
