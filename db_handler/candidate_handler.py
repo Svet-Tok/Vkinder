@@ -6,7 +6,7 @@ class CandidateDB:
         self.session = session
         self.first_name = first_name
         self.last_name = last_name
-        # self.vk_id = vk_id
+        self.vk_id = vk_id
 
     def exists(self):
         """Метод проверки наличия кандидата в бд."""
@@ -19,7 +19,7 @@ class CandidateDB:
         candidate = Candidates(
             first_name=self.first_name,
             last_name=self.last_name
-            # vk_id=self.vk_id
+            vk_id=self.vk_id
         )
 
         self.session.add(candidate)
