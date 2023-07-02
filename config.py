@@ -1,9 +1,9 @@
-community_token = 'vk1.a.eY27I7BNM40gGMz8geJ-oHCeXmSj5q-4Qfjvx-4jCEEUYIe4wzkx13NXOEai2J3Abo2d5FnPXYCf3dQdEm-zb8y7m5wUeeMXdmq5ZK0XGS2TF35VDxH9Fn-S1PUK926WyQ8JzocqATAGmS2uP53HZWGlHMQqK0xCEXCEVdaN3marKjbsFm6llYUqV8mstIQ_0eCnUHPodcStnBNylIlGWw'
-access_token = 'vk1.a.5xa2LYh0DKiNZNbrYgiuJ7cAgLbohhOTfxz4CusZjfsq_EiV4H7oK6gIhfhV1ZwPMuezG_1L0v4p5DeJnbR5nkctc_QiJD2j8daq_3Q0_LIuqrB6ja5Gk63awCiOdoBPZGezIn3RXcpjPtuKyoStqySttMQyrRyaU4TLicLCTkCYXXUbH6KQ2B_Z1_zAux4Zk3uUehXh7M1KgvGhwtHG3g'
+community_token = ''
+access_token = ''
 
 
 USERNAME = 'postgres'
-PASSWORD = '123456789'
+PASSWORD = ''
 PORT = 5432
 DATABASE = 'db_Vk'
 
