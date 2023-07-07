@@ -5,7 +5,6 @@ import vk_api
 from vk_api.exceptions import ApiError
 
 import config
-from db_handler.user_handler import UserDb
 
 
 def _bdate_toyear(bdate):
@@ -16,13 +15,12 @@ def _bdate_toyear(bdate):
 
 class VkTools:
     def __init__(self, access_token):
-
         self.vkapi = vk_api.VkApi(token=access_token)
 
-    def get_users(self, user_id):
+    def get_users(self, users_id):
         try:
             response, = self.vkapi.method('users.get',
-                                          {'user_id': user_id,
+                                          {'user_id': users_id,
                                            'fields': 'city,sex,relation,bdate'
                                            }
                                           )
@@ -30,7 +28,7 @@ class VkTools:
             return 'Нет доступа'
 
         result = {'name': (response['first_name'] + ' ' + response['last_name']) if
-        'first_name' in response and 'last_name' in response else None,
+                  'first_name' in response and 'last_name' in response else None,
                   'sex': response.get('sex'),
                   'city': response.get('city')['title'] if response.get('city') is not None else None,
                   'year': _bdate_toyear(response.get('bdate'))
@@ -61,44 +59,44 @@ class VkTools:
 
         return result
 
-    def get_photos(self, id):
+    def get_photos(self, owner_id):
         try:
             photos = self.vkapi.method('photos.get',
-                                       {'owner_id': id,
+                                       {'owner_id': owner_id,
                                         'album_id': 'profile',
-                                        'extended': 1,
-
+                                        'extended': 1
                                         }
                                        )
         except ApiError as e:
-            photos = {}
-            print(f'error = {e}')
+            return 'Нет доступа'
 
-        result = [{'owner_id': item['owner_id'],
-                   'id': item['id'],
-                   'likes': item['likes']['count'],
-                   'comments': item['comments']['count']
-                   } for item in photos['items']
-                  ]
-        return result[:3]
+        photos_candidate = []
+
+        for i in range(10):
+            try:
+                photos_candidate.append(
+                    [photos['items'][i]['likes']['count'],
+                     'photo' + str(photos['items'][i]['owner_id']) + '_' + str(photos['items'][i]['id'])])
+            except IndexError:
+                photos_candidate.append(['Нет фото'])
 
         top_photos = []
 
-        for item in self.sorting_likes(photos):
+        for item in self.sorting_likes(photos_candidate):
             top_photos.append(item)
         return top_photos
 
     @staticmethod
-    def sorting_likes(photos):
+    def sorting_likes(photos_like):
         top_photos = []
-        for photo in photos:
-            if photo != ['Нет фото'] and photos != 'Нет доступа':
+        for photo in photos_like:
+            if photo != ['Нет фото'] and photos_like != 'Нет доступа':
                 top_photos.append(photo)
         return sorted(top_photos, reverse=True)[:3]
 
 
 if __name__ == '__main__':
-    user_id = 888888
+    user_id = 8888888
     tools = VkTools(config.access_token)
     params = tools.get_users(user_id)
     candidates = tools.search_candidates(params, 20)
