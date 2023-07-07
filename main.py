@@ -1,11 +1,12 @@
 import vk_api
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.utils import get_random_id
 
 import config
-from db_handler.user_handler import UserDb
+
 from models.users import *
 from vk_bot import VkTools
 
@@ -13,6 +14,9 @@ from vk_bot import VkTools
 class BotVk():
     def __init__(self, community_token, access_token, age=None, sex=None, city=None):
 
+        self.city = city
+        self.sex = sex
+        self.age = age
         self.user_id = None
         self.session = None
         self.vk = vk_api.VkApi(token=community_token)
@@ -21,8 +25,6 @@ class BotVk():
         self.params = {}
         self.candidates = []
         self.offset = 0
-
-        
 
     def message_send(self, user_id, message, attachment=None):
         self.vk.method('messages.send',
