@@ -89,10 +89,3 @@ def check_user(engine, user_id, vk_id ):
             Users.worksheet_id == vk_id
         ).first()
         return True if from_bd else False
-
-
-    candidate_id = sq.Column(sq.Integer, primary_key=True)
-    first_name = sq.Column(sq.String(50))
-    last_name = sq.Column(sq.String(50))
-    vk_id = sq.Column(sq.String, nullable=False, unique=True)
-    users = relationship('Users', secondary='users_candidates', back_populates='candidates', cascade='all,delete')
