@@ -22,10 +22,7 @@ class BotVk():
         self.candidates = []
         self.offset = 0
 
-        user = UserDb(self.session, self.user_id, age, sex, city)
-        if user.exists:
-            return
-        user.add_user()
+        
 
     def message_send(self, user_id, message, attachment=None):
         self.vk.method('messages.send',
