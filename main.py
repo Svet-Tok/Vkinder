@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.utils import get_random_id
 
-import config
+import config import community_token, access_token, USERNAME, PASSWORD, PORT, DATABASE
 
 from models.users import *
 from vk_bot import VkTools
@@ -79,11 +79,11 @@ class BotVk():
 
 
 if __name__ == '__main__':
-    bot_interface = BotVk(config.community_token, config.access_token)
+    bot_interface = BotVk(community_token, access_token)
     bot_interface.event_handler()
     engine = create_engine(
-        f'postgresql+psycopg2://{config.USERNAME}:{config.PASSWORD}@localhost'
-        f':{config.PORT}/{config.DATABASE}')
+        f'postgresql+psycopg2://{USERNAME}:{PASSWORD}@localhost'
+        f':{PORT}/{DATABASE}')
 
     Base.metadata.create_all(engine)
 
