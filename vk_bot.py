@@ -1,10 +1,10 @@
 from datetime import datetime
-
+from pprint import pprint
 import vk_api
 
 from vk_api.exceptions import ApiError
 
-import config
+import config import access_token
 
 
 def _bdate_toyear(bdate):
@@ -24,8 +24,9 @@ class VkTools:
                                            'fields': 'city,sex,relation,bdate'
                                            }
                                           )
-        except ApiError:
-            return 'Нет доступа'
+        except ApiError as e:
+            response = {}
+            print(f'error = {e}')
 
         result = {'name': (response['first_name'] + ' ' + response['last_name']) if
                   'first_name' in response and 'last_name' in response else None,
@@ -59,46 +60,44 @@ class VkTools:
 
         return result
 
-    def get_photos(self, owner_id):
+    def get_photos(self, id):
         try:
             photos = self.vkapi.method('photos.get',
-                                       {'owner_id': owner_id,
+                                       {'owner_id': id,
                                         'album_id': 'profile',
                                         'extended': 1
                                         }
                                        )
         except ApiError as e:
-            return 'Нет доступа'
+            photos = {}
+            print(f'error = {e}')
 
-        photos_candidate = []
+        result = [{'owner_id': item['owner_id'],
+                   'id': item['id'],
+                   'likes': item['likes']['count'],
+                   'comments': item['comments']['count']
+                   } for item in photos['items']
+                  ]
+        return result[:3]
 
-        for i in range(10):
-            try:
-                photos_candidate.append(
-                    [photos['items'][i]['likes']['count'],
-                     'photo' + str(photos['items'][i]['owner_id']) + '_' + str(photos['items'][i]['id'])])
-            except IndexError:
-                photos_candidate.append(['Нет фото'])
-
+    def sorting_likes(photos):
         top_photos = []
-
-        for item in self.sorting_likes(photos_candidate):
-            top_photos.append(item)
-        return top_photos
-
-    @staticmethod
-    def sorting_likes(photos_like):
-        top_photos = []
-        for photo in photos_like:
-            if photo != ['Нет фото'] and photos_like != 'Нет доступа':
+        for photo in photos:
+            if photo != ['нет фото.'] and photos != 'нет доступа ':
                 top_photos.append(photo)
         return sorted(top_photos, reverse=True)[:3]
 
-
 if __name__ == '__main__':
     user_id = 8888888
-    tools = VkTools(config.access_token)
+    tools = VkTools(access_token)
     params = tools.get_users(user_id)
     candidates = tools.search_candidates(params, 20)
     candidate = candidates.pop()
-    photos = tools.get_photos(candidate['id'])
+    photo_top = tools.get_photos(candidate['id'])
+            
+
+
+        
+
+
+   
