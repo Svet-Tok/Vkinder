@@ -17,6 +17,7 @@ class Users(Base):
     candidates = relationship('Candidates', secondary='users_candidates', back_populates='users', cascade='all,delete')
 
 
+
 class Photos(Base):
     __tablename__ = 'photos'
 
